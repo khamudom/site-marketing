@@ -1,0 +1,42 @@
+---
+interface Props {
+  text: string;
+  variant?: "primary" | "secondary";
+}
+
+const { text, variant = "primary" } = Astro.props;
+---
+
+<button class:list={["button", variant]}>
+  {text}
+</button>
+
+<style>
+  .button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .primary {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+  }
+
+  .primary:hover {
+    background-color: #2563eb;
+  }
+
+  .secondary {
+    background-color: transparent;
+    color: #3b82f6;
+    border: 1px solid #3b82f6;
+  }
+
+  .secondary:hover {
+    background-color: #eff6ff;
+  }
+</style>
