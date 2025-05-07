@@ -9,37 +9,134 @@ import Button from "../components/Button.astro";
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>Site Marketing</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <main>
-      <h1>Welcome to Astro</h1>
+      <h1>Welcome</h1>
       <div style="display: flex; gap: 1rem; margin-top: 1rem;">
         <Button text="Primary Button" variant="primary" />
         <Button text="Secondary Button" variant="secondary" />
+      </div>
+      <div class="intro-logo">
+        <div class="intro-logo-wrap">
+          <div class="logo" style="background-position: 0% 0%">
+            <img
+              class="logo-pixel"
+              src="/images/StateStreetAnimatedLogo.gif"
+              alt=""
+            />
+            <img
+              class="logo-ssga"
+              src="/images/stateStreetGolf-start_screen_SSGA_logo.png"
+              alt=""
+            />
+          </div>
+        </div>
       </div>
     </main>
   </body>
 </html>
 
 <style>
+  body,
+  html {
+    margin: 0;
+    padding: 0;
+    font-family: "Press Start 2P", monospace;
+    background: #1a1a1a;
+  }
   main {
-    margin: auto;
-    padding: 1rem;
-    width: 800px;
-    max-width: calc(100% - 2rem);
-    color: white;
-    font-size: 20px;
-    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-block-start: 100px;
+    color: #fff;
   }
-
-  body {
-    background-color: #1a1a1a;
-  }
-
   h1 {
     font-size: 3rem;
     font-weight: 800;
     line-height: 1;
     margin: 0;
   }
+  .intro-logo {
+    margin-block-start: 100px;
+  }
+  .intro-logo .intro-logo-wrap .logo {
+    background-image: url("/images/stateStreetGolf-spritesheet_logo-e.png");
+    background-repeat: no-repeat;
+    width: 211px;
+    height: 650px;
+    position: relative;
+    top: 10%;
+    zoom: 330%;
+    -moz-transform: scale(2.5) translateY(200px);
+    image-rendering: pixelated;
+    z-index: 2;
+  }
+  .intro-logo .intro-logo-wrap .logo-pixel {
+    width: 216px;
+    height: 60%;
+    object-fit: cover;
+    position: absolute;
+    top: 0%;
+    left: -2px;
+    display: none;
+  }
+  .intro-logo .intro-logo-wrap .logo-ssga {
+    position: absolute;
+    width: 50%;
+    top: 35px;
+    left: 54px;
+    z-index: 3;
+    image-rendering: pixelated;
+  }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const logo = document.querySelector(".logo") as HTMLElement;
+    if (!logo) return;
+
+    let currentPosition = 0;
+    const totalFrames = 21;
+    const frameWidth = 211;
+    const totalWidth = frameWidth * totalFrames;
+    const frameDelay = 33; // 33ms between frames (~30fps)
+    const cycleDelay = 2000; // 2 second delay between cycles
+    let lastFrameTime = 0;
+    let isAnimating = false;
+
+    function animate(currentTime: number) {
+      if (!isAnimating) {
+        setTimeout(() => {
+          isAnimating = true;
+          lastFrameTime = currentTime;
+          requestAnimationFrame(animate);
+        }, cycleDelay);
+        return;
+      }
+
+      if (currentTime - lastFrameTime < frameDelay) {
+        requestAnimationFrame(animate);
+        return;
+      }
+
+      lastFrameTime = currentTime;
+      currentPosition = (currentPosition - frameWidth) % totalWidth;
+      logo.style.backgroundPosition = `${currentPosition}px 0px`;
+
+      if (currentPosition === 0) {
+        isAnimating = false;
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  });
+</script>
